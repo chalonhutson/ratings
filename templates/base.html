@@ -7,6 +7,14 @@
 <body>
   Ratings
   <hr>
+  <a href="{{ url_for('index') }}">Home</a>
+  
+  {% if session %}
+    {% if session['email'] %}
+      Logged in as {{ session['email'] }}
+      <a href="/logout">Logout</a>
+    {% endif %}
+  {% endif %}
 
   {% block content %} put your content here {% endblock %}
 

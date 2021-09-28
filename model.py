@@ -1,7 +1,7 @@
 """Models and database functions for Ratings project."""
 
 from flask_sqlalchemy import SQLAlchemy
-import os
+from os import environ
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -67,7 +67,7 @@ def connect_to_db(app):
 
     # Configure to use our PstgreSQL database
     # Added 'postgres:pass@localhost' to the URI meaning it connects to username: postgres and password.
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["POSTGRES_URI"]
+    app.config['SQLALCHEMY_DATABASE_URI'] = environ["POSTGRES_URI"]
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)

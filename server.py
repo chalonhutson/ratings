@@ -1,7 +1,8 @@
 """Movie Ratings."""
 
-from jinja2 import StrictUndefined
+from os import environ
 
+from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -9,12 +10,12 @@ from model import User, Rating, Movie, connect_to_db, db
 
 
 
-
 app = Flask(__name__)
 
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 # Required to use Flask sessions and the debug toolbar
-app.secret_key = "ABC"
+app.secret_key = environ["SESSION_SECRET_KEY"]
 
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an
@@ -30,7 +31,17 @@ def index():
 @app.route("/users")
 def user_list():
     users = User.query.all()
+    if session:
+        print("Session - " + session["email"])
     return render_template("user_list.html", users=users)
+
+@app.route("/movies")
+def movie_list():
+    movies = Movie.query.all()
+    if session:
+        print("Session - " + session["email"])
+    return render_template("movie_list.html", movies=movies)
+
 
 @app.route("/register", methods = ["POST"])
 def register_user():
@@ -59,6 +70,7 @@ def login():
         query = User.query.filter_by(email = email)
         results = query.first()
         if results.password == password:
+            session["email"] = email
             flash("Login successful.")
             return render_template("homepage.html")
         else:
@@ -67,6 +79,11 @@ def login():
     else:
         flash("Incorrect username.")
         return render_template("homepage.html")
+
+@app.route("/logout", methods = ["GET"])
+def logout():
+    session.pop("email", None)
+    return redirect(url_for("index"))
 
 
 
