@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
+{% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span>{{ message }}</span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endfor %}
+
 <h1>Ratings</h1>
 
 <h2>Movies</h2>
@@ -9,4 +19,27 @@
 <h2>Users</h2>
 <p><a href="/users">View all users</a></p>
 
+<h2>Register</h2>
+<form action = "/register" method = "post">
+    <p>Email:</p>
+    <p><input type = "text" name = "email" /></p>
+    <p>Password:</p>
+    <p><input type = "password" name = "password"/></p>
+    <p>Confirm Password:</p>
+    <p><input type = "password" name = "password-confirm" /></p>
+    <p>Age:</p>
+    <p><input type = "text" name = "age" /></p>
+    <p>Zip:</p>
+    <p><input type = "text" name = "zipcode" /></p>
+    <p><input type = "submit" value = "Register" /></p>
+</form>
+
+<h2>Login</h2>
+<form action = "/login" method = "post">
+    <p>Email:</p>
+    <p><input type = "text" name = "email" /></p>
+    <p>Password:</p>
+    <p><input type = "password" name = "password"/></p>
+    <p><input type = "submit" value = "Login" /></p>
+</form>
 {% endblock %}
